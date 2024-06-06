@@ -1,0 +1,1 @@
+SELECT properties from edges WHERE source = ? AND target = ? and label = ?

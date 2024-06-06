@@ -1,0 +1,1 @@
+SELECT body, label from nodes WHERE id = ?
