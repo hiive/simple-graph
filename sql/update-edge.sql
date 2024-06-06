@@ -1,1 +1,1 @@
-UPDATE edges SET properties = json(?) WHERE source = ? AND target = ?
+UPDATE edges SET label=?, properties = json(?) WHERE source = ? AND target = ?
