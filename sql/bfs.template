@@ -1,0 +1,24 @@
+SELECT *
+FROM (WITH RECURSIVE bfs_cte(target_node, path, depth) AS (
+    -- Base case: start with the root node
+    SELECT id,
+           CAST(id AS TEXT),
+           0
+    FROM nodes
+    WHERE id = ?1
+
+    UNION ALL
+
+    -- Recursive case: explore each child node
+    SELECT e.target,
+           cte.path || '⁂' || e.label || '⁂' || e.properties || '⁂' || e.target,
+           cte.depth + 1
+    FROM edges e
+             JOIN
+         bfs_cte cte ON cte.target_node = e.source
+    WHERE instr(substr(cte.path, length(e.target)), printf('%s', e.target)) = 0 -- Avoid revisiting nodes
+    AND instr(substr(cte.path, length(?1)), printf('%s', ?1)) = 0
+)
+      SELECT *
+      from bfs_cte b)
+{% if with_target %} WHERE target_node = ?2 {% endif %}
